@@ -1,14 +1,12 @@
 import React from 'react';
 import s from './Header.module.css';
 
-const Header = () => {
+export const Header = () => {
     return (
         <header className={s.header}>
             <img
-                src="https://avatars.mds.yandex.net/i?id=b462fe80092ada87ba33307cdf12bf62-4472919-images-thumbs&n=13"
+                src="https://sun1.userapi.com/sun1-13/s/v1/if2/NbJL93ZxY5d6qtEaynW_ba2A3lshp2pfx7pOAOehLmutJsX27QSVMidbHeMz07bC35ir1oCKsaBVb8QogfsY_BE1.jpg?size=1080x1080&quality=95&type=album"
                 alt="logo"/>
         </header>
     );
 }
-
-export default Header;
