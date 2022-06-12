@@ -23,3 +23,18 @@
 .message {
 
 }
+
+.dialogAvatar {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+.outgoing {
+    position: relative;
+    left: 0;
+}
+
+.incoming {
+    text-align: right;
+}

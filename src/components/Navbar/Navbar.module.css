@@ -12,3 +12,25 @@
 .item a.active {
     color: gold;
 }
+
+.friends {
+    margin-top: 30px;
+    color: white;
+}
+
+.friend {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.friendAvatar {
+    margin-top: 3px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+.friendName {
+    margin-top: 5px;
+    font-size: 60%;
+}

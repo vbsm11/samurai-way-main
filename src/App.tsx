@@ -8,22 +8,29 @@ import {BrowserRouter, Route} from "react-router-dom";
 import {Music} from "./components/Music/Music";
 import {News} from "./components/News/News";
 import {Settings} from "./components/Settings/Settings";
+import {RootStateType} from "./redux/state";
 
-export const App = () => {
+type AppPropsType = {
+    state: RootStateType
+}
+
+export const App: React.FC<AppPropsType> = (props) => {
+
     return (
-        <BrowserRouter>
             <div className='app-wrapper'>
                 <Header/>
-                <Navbar/>
+                <Navbar navbarState={props.state.sidebar}/>
                 <div className="app-wrapper-content">
-                    <Route path="/profile" component={Profile}/>
-                    <Route path="/dialogs" component={Dialogs}/>
-                    <Route path="/news" component={News}/>
-                    <Route path="/music" component={Music}/>
-                    <Route path="/settings" component={Settings}/>
+                    <Route path="/profile"
+                           render={() => <Profile profileState={props.state.profilePage}/>}/>
+                    <Route path="/dialogs"
+                           render={() => <Dialogs
+                               dialogsState={props.state.dialogsPage}/>}/>
+                    <Route path="/news" render={News}/>
+                    <Route path="/music" render={Music}/>
+                    <Route path="/settings" render={Settings}/>
                 </div>
             </div>
-        </BrowserRouter>
     );
 }
 
