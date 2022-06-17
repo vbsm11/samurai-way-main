@@ -17,6 +17,12 @@ export const Dialogs:React.FC<DialogsPropsType> = (props) => {
     let messagesElements = props.dialogsState.messages
         .map(m => <Message text={m.text} img={m.img} isMy={m.isMy}/>)
 
+    let newMessageElement = React.createRef<HTMLTextAreaElement>();
+
+    const forwardMessage = () => {
+        alert(newMessageElement.current?.value);
+    }
+
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
@@ -24,7 +30,10 @@ export const Dialogs:React.FC<DialogsPropsType> = (props) => {
             </div>
             <div className={s.messages}>
                 {messagesElements}
+                <textarea ref={newMessageElement}></textarea>
+                <button onClick={forwardMessage}>Forward</button>
             </div>
+
         </div>
     )
 }
