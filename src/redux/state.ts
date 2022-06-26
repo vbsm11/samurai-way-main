@@ -27,11 +27,13 @@ export type NavFriendType = {
 
 export type ProfilePageType = {
     posts: Array<PostType>
+    newPostText: string
 }
 
 export type DialogsPageType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
+    newMessageText: string
 }
 
 export type SidebarType = {
@@ -51,7 +53,8 @@ export let state: RootStateType = {
             {id: 2, message: 'It\'s my first post', likesCount: 6},
             {id: 3, message: 'Blabla', likesCount: 7},
             {id: 4, message: 'Dada', likesCount: 8}
-        ]
+        ],
+        newPostText: 'it-kamasutra.com'
     },
     dialogsPage: {
         dialogs: [
@@ -65,7 +68,8 @@ export let state: RootStateType = {
             {id: 2, text: 'Hi. Good, and you?', isMy: false, img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'},
             {id: 3, text: 'I am OK. Bye', isMy: true, img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg'},
             {id: 4, text: 'Goodbye', isMy: false, img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'}
-        ]
+        ],
+        newMessageText: ''
     },
     sidebar: {
         navFriends: [
@@ -76,12 +80,33 @@ export let state: RootStateType = {
     }
 }
 
-export let addPost = (postText: string) => {
+export const addPost = () => {
     let newPost: PostType = {
-        id: 5,
-        message: postText,
+        id: state.profilePage.posts.length + 1,
+        message: state.profilePage.newPostText,
         likesCount: 0
     };
     state.profilePage.posts.push(newPost);
+    updateNewPostText('')
+    rerenderEntireTree(state);
+}
+
+export const updateNewPostText = (newText:string) => {
+    state.profilePage.newPostText = newText;
+    rerenderEntireTree(state)
+}
+
+export const addMessage = () => {
+    let newMessage: MessageType = {
+        id: state.dialogsPage.messages.length + 1,
+        isMy: true,
+        img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg',
+        text: state.dialogsPage.newMessageText
+    }
+    state.dialogsPage.messages.push(newMessage);
+}
+
+export const updateNewMessageText = (newText: string) => {
+    state.dialogsPage.newMessageText = newText;
     rerenderEntireTree(state);
 }
