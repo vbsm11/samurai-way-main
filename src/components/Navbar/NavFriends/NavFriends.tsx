@@ -10,7 +10,7 @@ type NavFriendsPropsType = {
 export const NavFriends:React.FC<NavFriendsPropsType> = (props) => {
 
     let navFriends = props.friends
-        .map(f => <div className={s.friend}>
+        .map(f => <div key={f.id} className={s.friend}>
             <div className={s.friendName}>{f.name}</div>
             <div><img className={s.friendAvatar} src={f.img}/></div>
         </div>)

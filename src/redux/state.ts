@@ -44,75 +44,134 @@ export type RootStateType = {
     sidebar: SidebarType
 }
 
-let rerenderEntireTree = () => {
-    console.log('State changed')
+export type StoreType = {
+    _state: RootStateType
+    getState: () => RootStateType
+    _callSubscriber: () => void
+    addPost: () => void
+    updateNewPostText: (newText: string) => void
+    addMessage: () => void
+    updateNewMessageText: (newText: string) => void
+    subscribe: (observer: () => void) => void
 }
 
-export let state: RootStateType = {
-    profilePage: {
-        posts: [
-            {id: 1, message: 'Hi, how are you?', likesCount: 5},
-            {id: 2, message: 'It\'s my first post', likesCount: 6},
-            {id: 3, message: 'Blabla', likesCount: 7},
-            {id: 4, message: 'Dada', likesCount: 8}
-        ],
-        newPostText: 'it-kamasutra.com'
+export const store: StoreType = {
+    _state: {
+        profilePage: {
+            posts: [
+                {id: 1, message: 'Hi, how are you?', likesCount: 5},
+                {id: 2, message: 'It\'s my first post', likesCount: 6},
+                {id: 3, message: 'Blabla', likesCount: 7},
+                {id: 4, message: 'Dada', likesCount: 8}
+            ],
+            newPostText: 'it-kamasutra.com'
+        },
+        dialogsPage: {
+            dialogs: [
+                {
+                    id: 1,
+                    name: 'Quincy',
+                    img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'
+                },
+                {
+                    id: 2,
+                    name: 'Georgiy',
+                    img: 'https://static.spartak.com/m/025a/1c1a/2edd/e7b6/a169/e021/9764/bdd7/1280_1280_max.png'
+                },
+                {
+                    id: 3,
+                    name: 'Roman',
+                    img: 'https://static.spartak.com/m/3275/d28e/6c97/ede0/dedb/5365/7e75/0507/1280_1280_max.png'
+                },
+                {
+                    id: 4,
+                    name: 'Victor',
+                    img: 'https://static.spartak.com/m/4a9e/dbcd/ac74/bdbf/c310/5e88/3e5c/9057/1280_1280_max.png'
+                },
+            ],
+            messages: [
+                {
+                    id: 1,
+                    text: 'Hi. How are you?',
+                    isMy: true,
+                    img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg'
+                },
+                {
+                    id: 2,
+                    text: 'Hi. Good, and you?',
+                    isMy: false,
+                    img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'
+                },
+                {
+                    id: 3,
+                    text: 'I am OK. Bye',
+                    isMy: true,
+                    img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg'
+                },
+                {
+                    id: 4,
+                    text: 'Goodbye',
+                    isMy: false,
+                    img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'
+                }
+            ],
+            newMessageText: ''
+        },
+        sidebar: {
+            navFriends: [
+                {
+                    id: 1,
+                    name: 'Quincy',
+                    img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'
+                },
+                {
+                    id: 2,
+                    name: 'Georgiy',
+                    img: 'https://static.spartak.com/m/025a/1c1a/2edd/e7b6/a169/e021/9764/bdd7/1280_1280_max.png'
+                },
+                {
+                    id: 3,
+                    name: 'Roman',
+                    img: 'https://static.spartak.com/m/3275/d28e/6c97/ede0/dedb/5365/7e75/0507/1280_1280_max.png'
+                },
+            ]
+        }
     },
-    dialogsPage: {
-        dialogs: [
-            {id: 1, name: 'Quincy', img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'},
-            {id: 2, name: 'Georgiy', img: 'https://static.spartak.com/m/025a/1c1a/2edd/e7b6/a169/e021/9764/bdd7/1280_1280_max.png'},
-            {id: 3, name: 'Roman', img: 'https://static.spartak.com/m/3275/d28e/6c97/ede0/dedb/5365/7e75/0507/1280_1280_max.png'},
-            {id: 4, name: 'Victor', img: 'https://static.spartak.com/m/4a9e/dbcd/ac74/bdbf/c310/5e88/3e5c/9057/1280_1280_max.png'},
-        ],
-        messages: [
-            {id: 1, text: 'Hi. How are you?', isMy: true, img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg'},
-            {id: 2, text: 'Hi. Good, and you?', isMy: false, img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'},
-            {id: 3, text: 'I am OK. Bye', isMy: true, img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg'},
-            {id: 4, text: 'Goodbye', isMy: false, img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'}
-        ],
-        newMessageText: ''
+    getState() {
+        return this._state;
     },
-    sidebar: {
-        navFriends: [
-            {id: 1, name: 'Quincy', img: 'https://static.spartak.com/m/3f28/b2b5/5df1/7aa2/d7ff/7685/bb8b/0c35/1280_1280_max.png'},
-            {id: 2, name: 'Georgiy', img: 'https://static.spartak.com/m/025a/1c1a/2edd/e7b6/a169/e021/9764/bdd7/1280_1280_max.png'},
-            {id: 3, name: 'Roman', img: 'https://static.spartak.com/m/3275/d28e/6c97/ede0/dedb/5365/7e75/0507/1280_1280_max.png'},
-        ]
+    _callSubscriber(){
+        console.log('State changed')
+    },
+    addPost() {
+        debugger
+        let newPost: PostType = {
+            id: this._state.profilePage.posts.length + 1,
+            message: this._state.profilePage.newPostText,
+            likesCount: 0
+        };
+        this._state.profilePage.posts.push(newPost);
+        this.updateNewPostText('')
+        this._callSubscriber();
+    },
+    updateNewPostText(newText: string) {
+        this._state.profilePage.newPostText = newText;
+        this._callSubscriber()
+    },
+    addMessage() {
+        let newMessage: MessageType = {
+            id: this._state.dialogsPage.messages.length + 1,
+            isMy: true,
+            img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg',
+            text: this._state.dialogsPage.newMessageText
+        }
+        this._state.dialogsPage.messages.push(newMessage);
+    },
+    updateNewMessageText(newText: string) {
+        this._state.dialogsPage.newMessageText = newText;
+        this._callSubscriber();
+    },
+    subscribe(observer: () => void) {
+        this._callSubscriber = observer;
     }
-}
-
-export const addPost = () => {
-    let newPost: PostType = {
-        id: state.profilePage.posts.length + 1,
-        message: state.profilePage.newPostText,
-        likesCount: 0
-    };
-    state.profilePage.posts.push(newPost);
-    updateNewPostText('')
-    rerenderEntireTree();
-}
-
-export const updateNewPostText = (newText:string) => {
-    state.profilePage.newPostText = newText;
-    rerenderEntireTree()
-}
-
-export const addMessage = () => {
-    let newMessage: MessageType = {
-        id: state.dialogsPage.messages.length + 1,
-        isMy: true,
-        img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg',
-        text: state.dialogsPage.newMessageText
-    }
-    state.dialogsPage.messages.push(newMessage);
-}
-
-export const updateNewMessageText = (newText: string) => {
-    state.dialogsPage.newMessageText = newText;
-    rerenderEntireTree();
-}
-
-export const subscribe = (observer: () => void) => {
-    rerenderEntireTree = observer;
 }
