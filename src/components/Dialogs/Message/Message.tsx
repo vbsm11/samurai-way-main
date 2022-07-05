@@ -7,6 +7,7 @@ type MessagePropsType = {
     img: string
 }
 
+
 export const Message: React.FC<MessagePropsType> = (props) => {
     return props.isMy?
         <div className={`${s.message} ${s.outgoing}`}>

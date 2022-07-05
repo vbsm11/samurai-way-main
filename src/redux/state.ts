@@ -56,25 +56,25 @@ export type StoreType = {
     dispatch: (action: ActionsTypes) => void
 }
 
-type AddPostActionType = {
-    type: 'ADD-POST'
-}
+export type ActionsTypes =
+    ReturnType<typeof addPostActionCreator>
+    | ReturnType<typeof addMessageActionCreator>
+    | ReturnType<typeof updateNewPostActionCreator>
+    | ReturnType<typeof updateNewMessageActionCreator>;
 
-type AddMessageActionType = {
-    type: 'ADD-MESSAGE'
-}
+export const addPostActionCreator = () => ({type: 'ADD-POST'}) as const
 
-type UpdateNewPostTextActionType = {
-    type: 'UPDATE-NEW-POST-TEXT'
-    newText: string
-}
+export const updateNewPostActionCreator = (newText: string) => ({
+    type: 'UPDATE-NEW-POST-TEXT',
+    newText: newText
+}) as const
 
-type UpdateNewMessageTextActionType = {
-    type: 'UPDATE-NEW-MESSAGE-TEXT'
-    newText: string
-}
+export const addMessageActionCreator = () => ({type: 'ADD-MESSAGE'}) as const;
 
-export type ActionsTypes = AddPostActionType | AddMessageActionType | UpdateNewPostTextActionType | UpdateNewMessageTextActionType;
+export const updateNewMessageActionCreator = (newText: string) => ({
+    type: 'UPDATE-NEW-MESSAGE-TEXT',
+    newText: newText
+}) as const
 
 
 export const store: StoreType = {
