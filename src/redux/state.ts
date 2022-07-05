@@ -48,30 +48,26 @@ export type StoreType = {
     _state: RootStateType
     getState: () => RootStateType
     _callSubscriber: () => void
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
-    addMessage: () => void
-    updateNewMessageText: (newText: string) => void
     subscribe: (observer: () => void) => void
     dispatch: (action: ActionsTypes) => void
 }
 
 export type ActionsTypes =
-    ReturnType<typeof addPostActionCreator>
-    | ReturnType<typeof addMessageActionCreator>
-    | ReturnType<typeof updateNewPostActionCreator>
-    | ReturnType<typeof updateNewMessageActionCreator>;
+    ReturnType<typeof addPostCreator>
+    | ReturnType<typeof addMessageCreator>
+    | ReturnType<typeof updateNewPostCreator>
+    | ReturnType<typeof updateNewMessageCreator>;
 
-export const addPostActionCreator = () => ({type: 'ADD-POST'}) as const
+export const addPostCreator = () => ({type: 'ADD-POST'}) as const
 
-export const updateNewPostActionCreator = (newText: string) => ({
+export const updateNewPostCreator = (newText: string) => ({
     type: 'UPDATE-NEW-POST-TEXT',
     newText: newText
 }) as const
 
-export const addMessageActionCreator = () => ({type: 'ADD-MESSAGE'}) as const;
+export const addMessageCreator = () => ({type: 'ADD-MESSAGE'}) as const;
 
-export const updateNewMessageActionCreator = (newText: string) => ({
+export const updateNewMessageCreator = (newText: string) => ({
     type: 'UPDATE-NEW-MESSAGE-TEXT',
     newText: newText
 }) as const
@@ -86,7 +82,7 @@ export const store: StoreType = {
                 {id: 3, message: 'Blabla', likesCount: 7},
                 {id: 4, message: 'Dada', likesCount: 8}
             ],
-            newPostText: 'it-kamasutra.com'
+            newPostText: ''
         },
         dialogsPage: {
             dialogs: [
@@ -170,33 +166,6 @@ export const store: StoreType = {
         this._callSubscriber = observer;
     },
 
-    addPost() {
-        let newPost: PostType = {
-            id: this._state.profilePage.posts.length + 1,
-            message: this._state.profilePage.newPostText,
-            likesCount: 0
-        };
-        this._state.profilePage.posts.push(newPost);
-        this.updateNewPostText('')
-        this._callSubscriber();
-    },
-    updateNewPostText(newText: string) {
-        this._state.profilePage.newPostText = newText;
-        this._callSubscriber()
-    },
-    addMessage() {
-        let newMessage: MessageType = {
-            id: this._state.dialogsPage.messages.length + 1,
-            isMy: true,
-            img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg',
-            text: this._state.dialogsPage.newMessageText
-        }
-        this._state.dialogsPage.messages.push(newMessage);
-    },
-    updateNewMessageText(newText: string) {
-        this._state.dialogsPage.newMessageText = newText;
-        this._callSubscriber();
-    },
     dispatch(action) {
         if (action.type === 'ADD-POST') {
             let newPost: PostType = {
@@ -205,7 +174,6 @@ export const store: StoreType = {
                 likesCount: 0
             };
             this._state.profilePage.posts.push(newPost);
-            this.updateNewPostText('')
             this._callSubscriber();
         } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
             this._state.profilePage.newPostText = action.newText;

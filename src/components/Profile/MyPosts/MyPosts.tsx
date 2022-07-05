@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import s from './MyPosts.module.css';
 import {Post} from './Post/Post';
-import {ActionsTypes, addPostActionCreator, PostType, updateNewPostActionCreator} from '../../../redux/state';
+import {ActionsTypes, addPostCreator, PostType, updateNewPostCreator} from '../../../redux/state';
 
 type MyPostsPropsType = {
     posts: Array<PostType>
@@ -17,11 +17,12 @@ export const MyPosts: React.FC<MyPostsPropsType> = (props) => {
 
 
     const addPost = () => {
-        props.dispatch(addPostActionCreator());
+        props.dispatch(addPostCreator());
+        props.dispatch(updateNewPostCreator(''));
     }
 
     const onPostChange = (e:ChangeEvent<HTMLTextAreaElement>) => {
-        props.dispatch(updateNewPostActionCreator(e.currentTarget.value));
+        props.dispatch(updateNewPostCreator(e.currentTarget.value));
     }
 
     return (
@@ -32,6 +33,7 @@ export const MyPosts: React.FC<MyPostsPropsType> = (props) => {
                     <textarea
                         onChange={onPostChange}
                         value={props.newPostText}
+                        placeholder={'Whats new?'}
                     ></textarea>
                 </div>
                 <div>
