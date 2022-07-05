@@ -53,7 +53,29 @@ export type StoreType = {
     addMessage: () => void
     updateNewMessageText: (newText: string) => void
     subscribe: (observer: () => void) => void
+    dispatch: (action: ActionsTypes) => void
 }
+
+type AddPostActionType = {
+    type: 'ADD-POST'
+}
+
+type AddMessageActionType = {
+    type: 'ADD-MESSAGE'
+}
+
+type UpdateNewPostTextActionType = {
+    type: 'UPDATE-NEW-POST-TEXT'
+    newText: string
+}
+
+type UpdateNewMessageTextActionType = {
+    type: 'UPDATE-NEW-MESSAGE-TEXT'
+    newText: string
+}
+
+export type ActionsTypes = AddPostActionType | AddMessageActionType | UpdateNewPostTextActionType | UpdateNewMessageTextActionType;
+
 
 export const store: StoreType = {
     _state: {
@@ -137,14 +159,18 @@ export const store: StoreType = {
             ]
         }
     },
+    _callSubscriber() {
+        console.log('State changed')
+    },
+
     getState() {
         return this._state;
     },
-    _callSubscriber(){
-        console.log('State changed')
+    subscribe(observer: () => void) {
+        this._callSubscriber = observer;
     },
+
     addPost() {
-        debugger
         let newPost: PostType = {
             id: this._state.profilePage.posts.length + 1,
             message: this._state.profilePage.newPostText,
@@ -171,7 +197,30 @@ export const store: StoreType = {
         this._state.dialogsPage.newMessageText = newText;
         this._callSubscriber();
     },
-    subscribe(observer: () => void) {
-        this._callSubscriber = observer;
+    dispatch(action) {
+        if (action.type === 'ADD-POST') {
+            let newPost: PostType = {
+                id: this._state.profilePage.posts.length + 1,
+                message: this._state.profilePage.newPostText,
+                likesCount: 0
+            };
+            this._state.profilePage.posts.push(newPost);
+            this.updateNewPostText('')
+            this._callSubscriber();
+        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+            this._state.profilePage.newPostText = action.newText;
+            this._callSubscriber()
+        } else if (action.type === 'ADD-MESSAGE') {
+            let newMessage: MessageType = {
+                id: this._state.dialogsPage.messages.length + 1,
+                isMy: true,
+                img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg',
+                text: this._state.dialogsPage.newMessageText
+            }
+            this._state.dialogsPage.messages.push(newMessage);
+        } else if (action.type === 'UPDATE-NEW-MESSAGE-TEXT') {
+            this._state.dialogsPage.newMessageText = action.newText;
+            this._callSubscriber();
+        }
     }
 }
