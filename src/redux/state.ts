@@ -1,3 +1,7 @@
+import {addPostCreator, profileReducer, updateNewPostCreator} from './profile-reducer';
+import {addMessageCreator, dialogsReducer, updateNewMessageCreator} from './dialogs-reducer';
+import {sidebarReducer} from './sidebar-reducer';
+
 export type PostType = {
     id: number
     message: string
@@ -57,21 +61,6 @@ export type ActionsTypes =
     | ReturnType<typeof addMessageCreator>
     | ReturnType<typeof updateNewPostCreator>
     | ReturnType<typeof updateNewMessageCreator>;
-
-export const addPostCreator = () => ({type: 'ADD-POST'}) as const
-
-export const updateNewPostCreator = (newText: string) => ({
-    type: 'UPDATE-NEW-POST-TEXT',
-    newText: newText
-}) as const
-
-export const addMessageCreator = () => ({type: 'ADD-MESSAGE'}) as const;
-
-export const updateNewMessageCreator = (newText: string) => ({
-    type: 'UPDATE-NEW-MESSAGE-TEXT',
-    newText: newText
-}) as const
-
 
 export const store: StoreType = {
     _state: {
@@ -167,28 +156,10 @@ export const store: StoreType = {
     },
 
     dispatch(action) {
-        if (action.type === 'ADD-POST') {
-            let newPost: PostType = {
-                id: this._state.profilePage.posts.length + 1,
-                message: this._state.profilePage.newPostText,
-                likesCount: 0
-            };
-            this._state.profilePage.posts.push(newPost);
-            this._callSubscriber();
-        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
-            this._state.profilePage.newPostText = action.newText;
-            this._callSubscriber()
-        } else if (action.type === 'ADD-MESSAGE') {
-            let newMessage: MessageType = {
-                id: this._state.dialogsPage.messages.length + 1,
-                isMy: true,
-                img: 'https://img.championat.com/s/735x490/news/big/r/t/gilermo-abaskal-vozglavil-spartak_16548517192029530367.jpg',
-                text: this._state.dialogsPage.newMessageText
-            }
-            this._state.dialogsPage.messages.push(newMessage);
-        } else if (action.type === 'UPDATE-NEW-MESSAGE-TEXT') {
-            this._state.dialogsPage.newMessageText = action.newText;
-            this._callSubscriber();
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action);
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action);
+        // this._state.sidebar = sidebarReducer(this._state.sidebar, action);
+
+        this._callSubscriber();
     }
 }
