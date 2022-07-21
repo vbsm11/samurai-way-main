@@ -2,12 +2,13 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialogs.module.css';
 import {DialogItem} from './DialogItem/DialogItem';
 import {Message} from './Message/Message';
-import {ActionsTypes, DialogsPageType} from '../../redux/store';
-import {addMessageCreator, updateNewMessageCreator} from '../../redux/dialogs-reducer'
+import {DialogsPageType} from '../../redux/store';
+
 
 type DialogsPropsType = {
     dialogsState: DialogsPageType
-    dispatch: (action: ActionsTypes) => void
+    forwardMessage: () => void
+    updateNewMessage: (text: string) => void
 }
 
 
@@ -21,12 +22,11 @@ export const Dialogs: React.FC<DialogsPropsType> = (props) => {
         .map(m => <Message key={m.id} text={m.text} img={m.img} isMy={m.isMy}/>)
 
     const onMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.dispatch(updateNewMessageCreator(e.currentTarget.value))
+        props.updateNewMessage(e.currentTarget.value)
     }
 
-    const forwardMessage = () => {
-        props.dispatch(addMessageCreator());
-        props.dispatch(updateNewMessageCreator(''))
+    const sendMessage = () => {
+        props.forwardMessage();
     }
 
     return (
@@ -44,7 +44,7 @@ export const Dialogs: React.FC<DialogsPropsType> = (props) => {
                     ></textarea>
                 </div>
                 <div>
-                    <button onClick={forwardMessage}>Forward</button>
+                    <button onClick={sendMessage}>Forward</button>
                 </div>
             </div>
 
